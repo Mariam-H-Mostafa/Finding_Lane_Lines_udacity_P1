@@ -31,6 +31,7 @@ After applying canny:
 
 
 After applying detecting region of interest:
+
 ![Image](https://i.ibb.co/1XVPQmY/Picture6.png)
 
 
