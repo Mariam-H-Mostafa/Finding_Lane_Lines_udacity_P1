@@ -13,7 +13,7 @@ Then, determine our region of interest, that we are concerned with the lines ins
 
 **Image**:
 
-(https://i.ibb.co/B31KvS3/Picture2.png)
+![Image](https://i.ibb.co/B31KvS3/Picture2.png)
 
 After applying grayscale transform:
 
