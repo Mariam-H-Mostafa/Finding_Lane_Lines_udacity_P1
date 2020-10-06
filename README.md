@@ -1,56 +1,53 @@
-# **Finding Lane Lines on the Road** 
-[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
+# Finding Lane Lines on the Road
 
-<img src="examples/laneLines_thirdPass.jpg" width="480" alt="Combined Image" />
+The goal of this project is to detect lane lines the car is moving in, the approach is done on two steps:
 
-Overview
----
+ 1. Create a pipeline to detect lines in series of images.
+ 2. Extrapolate the lines detected to draw just one line representing the right lane and left lane.
+ 3. Apply the pipeline created to detect lines in a video stream.
 
-When we drive, we use our eyes to decide where to go.  The lines on the road that show us where the lanes are act as our constant reference for where to steer the vehicle.  Naturally, one of the first things we would like to do in developing a self-driving car is to automatically detect lane lines using an algorithm.
+Pipeline Explanation:
 
-In this project you will detect lane lines in images using Python and OpenCV.  OpenCV means "Open-Source Computer Vision", which is a package that has many useful tools for analyzing images.  
+First, read the image and extract some useful information like no. of rows and no. of columns using imshape function. Convert the image into gray scale, then smoothing the image using GaussianBlur, then detect the edges using canny function, detect pixels above the high_threshold, and reject pixels below the low_threshold.
+Then, determine our region of interest, that we are concerned with the lines inside it. At that point we can run hough transform to find lines from canny edges.
 
-To complete the project, two files will be submitted: a file containing project code and a file containing a brief write up explaining your solution. We have included template files to be used both for the [code](https://github.com/udacity/CarND-LaneLines-P1/blob/master/P1.ipynb) and the [writeup](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md).The code file is called P1.ipynb and the writeup template is writeup_template.md 
+**Image**:
 
-To meet specifications in the project, take a look at the requirements in the [project rubric](https://review.udacity.com/#!/rubrics/322/view)
+![enter image description here](https://i.ibb.co/FJZh4Xg/Picture2.png)
 
+After applying grayscale transform:
 
-Creating a Great Writeup
----
-For this project, a great writeup should provide a detailed response to the "Reflection" section of the [project rubric](https://review.udacity.com/#!/rubrics/322/view). There are three parts to the reflection:
+![Image3](https://i.ibb.co/dM7BBJw/Picture3.png)
 
-1. Describe the pipeline
+After applying gaussian:
+![enter image description here](https://i.ibb.co/TmFhdDm/Picture4.png)
 
-2. Identify any shortcomings
-
-3. Suggest possible improvements
-
-We encourage using images in your writeup to demonstrate how your pipeline works.  
-
-All that said, please be concise!  We're not looking for you to write a book here: just a brief description.
-
-You're not required to use markdown for your writeup.  If you use another method please just submit a pdf of your writeup. Here is a link to a [writeup template file](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md). 
+After applying canny:
+![enter image description here](https://i.ibb.co/ZcQxCdJ/Picture5.png)
 
 
-The Project
----
+After applying detecting region of interest:
+![enter image description here](https://i.ibb.co/xjtS3gK/Picture6.png)
 
-## If you have already installed the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) you should be good to go!   If not, you should install the starter kit to get started on this project. ##
+After Hough lines transform:
+![enter image description here](https://i.ibb.co/MZNw2LS/Picture7.png)
 
-**Step 1:** Set up the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) if you haven't already.
+After merging it with original image:
+![enter image description here](https://i.ibb.co/8sdWd2B/Picture8.png)
+**Adjusting the `draw_lines` function to extrapolate** :
 
-**Step 2:** Open the code in a Jupyter Notebook
+Create the slope of each line, if it is positive so these points related to the line in the right area, if negative so they related to points in the left region.
 
-You will complete the project code in a Jupyter notebook.  If you are unfamiliar with Jupyter Notebooks, check out [Udacity's free course on Anaconda and Jupyter Notebooks](https://classroom.udacity.com/courses/ud1111) to get started.
+According to simple 1st degree polynomial, y=mx+b, so I will calculate the intercept of each line. Create a list for each group rm,lm,bR,bL
 
-Jupyter is an Ipython notebook where you can run blocks of code and see results interactively.  All the code for this project is contained in a Jupyter notebook. To start Jupyter in your browser, use terminal to navigate to your project directory and then run the following command at the terminal prompt (be sure you've activated your Python 3 carnd-term1 environment as described in the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) installation instructions!):
+Use the average of them to create new lines, bases on the above mentioned equation.
 
-`> jupyter notebook`
+Now, we can apply the pipeline created to the video provided
 
-A browser window will appear showing the contents of the current directory.  Click on the file called "P1.ipynb".  Another browser window will appear displaying the notebook.  Follow the instructions in the notebook to complete the project.  
+**Reflection**:
 
-**Step 3:** Complete the project and submit both the Ipython notebook and the project writeup
+Roads with curved lanes or uphill and downhill, couldn’t detected easily using the 1st degree polynomial.
 
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
+Also in extrapolation part, I think there could be another accurate way than separating based on right and left slopes, especially if the roads are full of curves.
 
+We can use like history to detect next point.
