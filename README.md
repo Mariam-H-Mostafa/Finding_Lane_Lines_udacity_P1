@@ -17,23 +17,22 @@ Then, determine our region of interest, that we are concerned with the lines ins
 
 After applying grayscale transform:
 
-(https://i.ibb.co/DWWRq3r/Picture3.png)
+![Image](https://i.ibb.co/DWWRq3r/Picture3.png)
 
 After applying gaussian:
-(https://i.ibb.co/ynCkCfw/Picture4.png)
+![Image](https://i.ibb.co/ynCkCfw/Picture4.png)
 
 After applying canny:
-(https://i.ibb.co/cb5PBSr/Picture5.png)
-
+![Image](https://i.ibb.co/cb5PBSr/Picture5.png)
 
 After applying detecting region of interest:
-(https://i.ibb.co/1XVPQmY/Picture6.png)
+![Image](https://i.ibb.co/1XVPQmY/Picture6.png)
 
 After Hough lines transform:
-(https://i.ibb.co/pyn9H5x/Picture7.png)
+![Image](https://i.ibb.co/pyn9H5x/Picture7.png)
 
 After merging it with original image:
-(https://i.ibb.co/k0JwZD2/Picture8.png)
+![Image](https://i.ibb.co/k0JwZD2/Picture8.png)
 **Adjusting the `draw_lines` function to extrapolate** :
 
 Create the slope of each line, if it is positive so these points related to the line in the right area, if negative so they related to points in the left region.
